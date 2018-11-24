@@ -21,7 +21,7 @@ To get all player data into JSON(suggested because you dont want to poll every s
 
 ```
 data = datanba.player_stats.AllOfBasketball(["2018-19"])
-data.get_player_json("vchill.json")
+data.get_player_json("players.json")
 ```
 
 To get all player data as an array(not suggested since you have to poll every single time)
