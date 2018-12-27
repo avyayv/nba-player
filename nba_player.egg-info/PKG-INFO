@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: nba-player
-Version: 0.3.1
+Version: 0.6.4
 Summary: Get all NBA player data into JSON format
 Home-page: https://github.com/avyayv/python_nba_players
 Author: Avyay Varadarajan

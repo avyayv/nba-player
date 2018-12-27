@@ -6,6 +6,43 @@ from requests_futures.sessions import FuturesSession
 import requests
 from bs4 import BeautifulSoup
 from lxml import html
+import jsonpickle
+from socket import gethostbyname, gaierror
+import os
+
+def truncate_utf8_chars(filename, count, ignore_newlines=True):
+    """
+    Truncates last `count` characters of a text file encoded in UTF-8.
+    :param filename: The path to the text file to read
+    :param count: Number of UTF-8 characters to remove from the end of the file
+    :param ignore_newlines: Set to true, if the newline character at the end of the file should be ignored
+    """
+    with open(filename, 'rb+') as f:
+        last_char = None
+
+        size = os.fstat(f.fileno()).st_size
+
+        offset = 1
+        chars = 0
+        while offset <= size:
+            f.seek(-offset, os.SEEK_END)
+            b = ord(f.read(1))
+
+            if ignore_newlines:
+                if b == 0x0D or b == 0x0A:
+                    offset += 1
+                    continue
+
+            if b & 0b10000000 == 0 or b & 0b11000000 == 0b11000000:
+                # This is the first byte of a UTF8 character
+                chars += 1
+                if chars == count:
+                    # When `count` number of characters have been found, move current position back
+                    # with one byte (to include the byte just checked) and truncate the file
+                    f.seek(-1, os.SEEK_CUR)
+                    f.truncate()
+                    return
+            offset += 1
 
 players = []
 
@@ -76,7 +113,7 @@ def findById(id):
     for player in players:
         if int(player.id) == int(id):
             return player
-    return -1
+    return None
 
 class Player:
     def __init__(self, id, name, current):
@@ -104,7 +141,7 @@ class Player:
         for advanced in self.advanced_statistics:
             if(advanced.year == year):
                 return advanced
-        return -1
+        return None
     def ret_stuff(self):
         return ((self.advanced_statistics[-1].secondaryassist+self.offensive_seasons[-1].ast)*2.678245121380469)+self.offensive_seasons[-1].pts+(self.offensive_seasons[-1].reb*1.2076782265205361)+(self.offensive_seasons[-1].stl*1.2076782265205361)+(self.offensive_seasons[-1].blk*1.2076782265205361)-(self.offensive_seasons[-1].tov*1.2076782265205361)-(self.offensive_seasons[-1].pf*1.2076782265205361)
 
@@ -218,17 +255,23 @@ class AllOfBasketball:
     profs = []
 
     def __init__(self, years):
+        self.years = years
 
-        ids = []
+    def gather(self, file_name, exists=None):
+        first = True
+        remove_ids = []
+        if exists:
+            decoded_file = self.players_from_json(file_name)
+            for player in decoded_file:
+                remove_ids.append(player.id)
 
         all_basic_player_json = json.loads(requests.get('http://stats.nba.com/stats/commonallplayers', headers=headers, params=all_player_params).text)
 
         for resultSet in all_basic_player_json["resultSets"]:
             for player_json in resultSet["rowSet"]:
                 if player_json[-1] == "Y":
-                    if int(player_json[5]) >= int(years[0].split("-")[0]):
+                    if int(player_json[5]) >= int(self.years[0].split("-")[0]) and (player_json[0] not in remove_ids):
                         player = Player(player_json[0], player_json[2], player_json[6])
-                        ids.append(player_json[0])
 
         contract_soup = BeautifulSoup(requests.get("https://www.basketball-reference.com/contracts/players.html", headers=headers).text, "html.parser")
 
@@ -261,7 +304,7 @@ class AllOfBasketball:
             except (IndexError, KeyError):
                 continue
 
-        for year in years:
+        for year in self.years:
             defParams = retStuff(year, "Defense")
             driveParams = retStuff(year, "Drives")
             efficiencyParams = retStuff(year, "Efficiency")
@@ -286,45 +329,49 @@ class AllOfBasketball:
             postData = json.loads(postResponse.result().content)
 
             for player in defData["resultSets"][0]["rowSet"]:
-                advanced = PlayerTracking(year, player[11], player[12], player[13], "", "", "",
-                "", "", "", "", "", "",
-                "", "", "", "", "", "",
-                "", "", "", "", "")
-                findById(player[0]).advanced_statistics.append(advanced)
+                if findById(player[0]):
+                    advanced = PlayerTracking(year, player[11], player[12], player[13], "", "", "",
+                    "", "", "", "", "", "",
+                    "", "", "", "", "", "",
+                    "", "", "", "", "")
+                    findById(player[0]).advanced_statistics.append(advanced)
 
             for player in driveData["resultSets"][0]["rowSet"]:
-                advanced = findById(player[0]).find_advanced_for_year(year)
-                advanced.drivepts = player[15]
-                advanced.driveast = player[19]
-                advanced.drivepass = player[17]
-                advanced.drivepf = player[23]
-                advanced.drivefta = player[13]
+                if findById(player[0]):
+                    advanced = findById(player[0]).find_advanced_for_year(year)
+                    advanced.drivepts = player[15]
+                    advanced.driveast = player[19]
+                    advanced.drivepass = player[17]
+                    advanced.drivepf = player[23]
+                    advanced.drivefta = player[13]
 
             for player in efficiencyData["resultSets"][0]["rowSet"]:
-                advanced = findById(player[0]).find_advanced_for_year(year)
-                advanced.pullupoints = player[13]
-                advanced.catchshootpoints = player[11]
-                advanced.posttouchpoints = player[17]
-                advanced.elbowtouchpoints = player[19]
+                if findById(player[0]):
+                    advanced = findById(player[0]).find_advanced_for_year(year)
+                    advanced.pullupoints = player[13]
+                    advanced.catchshootpoints = player[11]
+                    advanced.posttouchpoints = player[17]
+                    advanced.elbowtouchpoints = player[19]
 
             for player in passData["resultSets"][0]["rowSet"]:
-                advanced = findById(player[0]).find_advanced_for_year(year)
-                advanced.passesmade = player[8]
-                advanced.passesreceived = player[9]
-                advanced.secondaryassist = player[12]
-                advanced.potentialassist = player[13]
-                advanced.pointscreatedbyassist = player[14]
-                advanced.overallassist = player[10]
+                if findById(player[0]):
+                    advanced = findById(player[0]).find_advanced_for_year(year)
+                    advanced.passesmade = player[8]
+                    advanced.passesreceived = player[9]
+                    advanced.secondaryassist = player[12]
+                    advanced.potentialassist = player[13]
+                    advanced.pointscreatedbyassist = player[14]
+                    advanced.overallassist = player[10]
             for player in postData["resultSets"][0]["rowSet"]:
-                advanced = findById(player[0]).find_advanced_for_year(year)
-                advanced.postups = player[7]
-                advanced.touches = player[8]
-                advanced.postpasses = player[17]
-                advanced.posttov = player[21]
-                advanced.postpf = player[23]
+                if findById(player[0]):
+                    advanced = findById(player[0]).find_advanced_for_year(year)
+                    advanced.postups = player[7]
+                    advanced.touches = player[8]
+                    advanced.postpasses = player[17]
+                    advanced.posttov = player[21]
+                    advanced.postpf = player[23]
 
             for player in players:
-
                 try:
                     params = (
                         ('LeagueID', '00'),
@@ -396,20 +443,22 @@ class AllOfBasketball:
 
                     print("Gathering Data..." + player.name)
                     self.profs.append(player)
-                    time.sleep(0.8)
+                    truncate_utf8_chars(file_name, 1)
+                    with open(file_name, 'a') as file:
+                        if first and (not exists):
+                            first = False
+                            file.write('[\n')
+                        else:
+                            file.write(',\n')
 
-                except(KeyError, IndexError, ConnectionError):
+                        file.write(jsonpickle.encode(player))
+                        file.write(']')
+                    time.sleep(1.0)
+
+                except(KeyError, IndexError):
                     print("Whoops, weird guy just appeared "+ player.name)
 
-    def get_players(self):
-        return self.profs
-
-    def get_player_json(self, file_name):
-        with open(file_name, 'w') as file:
-            file.write('[')
-            for player in self.profs:
-                file.write(json.dumps(player, default=lambda o: o.__dict__, indent=4, sort_keys=True))
-                if self.profs.index(player) != len(self.profs)-1:
-                    file.write(',\n')
-                else:
-                    file.write(']')
+    def players_from_json(self, file_name):
+        with open(file_name, 'r') as myfile:
+            data = myfile.read()
+            return jsonpickle.decode(data)

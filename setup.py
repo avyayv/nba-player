@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="nba_player",
-    version="0.3.1",
+    version="0.6.4",
     author="Avyay Varadarajan",
     author_email="avyayv@gmail.com",
     description="Get all NBA player data into JSON format",
