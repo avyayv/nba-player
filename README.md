@@ -45,7 +45,7 @@ players = data.players_from_json('players.json')
 Now you have all NBA players in your `players` variable.
 
 ### Player Data Format
-Each player comes in a certain format - as this module is heavily in development certain features might not work at the moment.
+Each player comes in a certain format - as this module is heavily in development certain features might not work at the moment. The features that aren't working are indicated below.
 
 * `advanced_statistics`
   1. `catchshootpoints`
