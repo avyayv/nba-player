@@ -72,7 +72,6 @@ Each player comes in a certain format - as this module is heavily in development
   22. secondaryassist
   23. touches
   24. year
-
 2. offensive_seasons
   1. age
   2. ast
@@ -98,7 +97,6 @@ Each player comes in a certain format - as this module is heavily in development
   22. threep
   23. tov
   24. year
-
 3. defensive_seasons
   1. age(NOT WORKING)
   2. gs(NOT WORKING)
@@ -124,7 +122,6 @@ Each player comes in a certain format - as this module is heavily in development
   22. win_p
   23. wins
   24. year
-  
 4. current
 5. height
 6. id
