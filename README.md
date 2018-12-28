@@ -47,6 +47,13 @@ Now you have all NBA players in your `players` variable.
 ### Player Data Format
 Each player comes in a certain format - as this module is heavily in development certain features might not work at the moment.
 
+1. First ordered list item
+2. Another item
+⋅⋅* Unordered sub-list. 
+1. Actual numbers don't matter, just that it's a number
+⋅⋅1. Ordered sub-list
+4. And another item.
+
 1. advanced_statistics
   1. catchshootpoints
   2. driveast
