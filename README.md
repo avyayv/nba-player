@@ -44,3 +44,94 @@ players = data.players_from_json('players.json')
 ```
 Now you have all NBA players in your `players` variable.
 
+### Player Data Format
+Each player comes in a certain format - as this module is heavily in development certain features might not work at the moment.
+
+advanced_statistics
+  catchshootpoints
+  driveast
+  drivefta
+  drivepass
+  drivepf
+  drivepts
+  elbowtouchpoints
+  overallassist
+  passesmade
+  passesreceived
+  pointscreatedbyassist
+  postpasses
+  postpf
+  posttouchpoints
+  posttov
+  postups
+  potentialassist
+  pullupoints
+  rimfga
+  rimfgm
+  imfgp
+  secondaryassist
+  touches
+  year
+
+offensive_seasons
+  age
+  ast
+  blk
+  dreb
+  fga
+  fgm
+  fgp
+  ftm
+  gp
+  gs
+  min
+  oreb
+  pf
+  playerid
+  pts
+  reb
+  stl
+  teamabr
+  teamid
+  threea
+  threem
+  threep
+  tov
+  year
+
+defensive_seasons
+  age(NOT WORKING)
+  gs(NOT WORKING)
+  ast_pct
+  ast_ratio
+  ast_to
+  defensive_rating
+  dreb_percentage
+  gp
+  losses
+  min
+  net_rating
+  offensive_rating
+  oreb_percentage
+  pace
+  pie
+  playerid
+  teamabr
+  teamid
+  tm_tov_pct
+  ts_pct
+  usg_pct
+  win_p
+  wins
+  year
+  
+current
+height
+id
+name
+position
+salary(NOT WORKING)
+weight
+
+
+
