@@ -98,8 +98,8 @@ Each player comes in a certain format - as this module is heavily in development
   23. `tov`
   24. `year`
 * `defensive_seasons`
-  1. `age` (NOT WORKING)
-  2. `gs` (NOT WORKING)
+  1. `age` **(NOT WORKING)**
+  2. `gs` **(NOT WORKING)**
   3. `ast_pct`
   4. `ast_ratio`
   5. `ast_to`
@@ -127,7 +127,7 @@ Each player comes in a certain format - as this module is heavily in development
 * `id`
 * `name`
 * `position`
-* `salary` (NOT WORKING)
+* `salary` **(NOT WORKING)**
 * `weight`
 
 
