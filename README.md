@@ -72,7 +72,7 @@ Each player comes in a certain format - as this module is heavily in development
   22. `secondaryassist`
   23. `touches`
   24. `year`
-* `offensive_seasons`
+* `raw_data_seasons`
   1. `age`
   2. `ast`
   3. `blk`
@@ -97,31 +97,29 @@ Each player comes in a certain format - as this module is heavily in development
   22. `threep`
   23. `tov`
   24. `year`
-* `defensive_seasons`
-  1. `age` **(NOT WORKING)**
-  2. `gs` **(NOT WORKING)**
-  3. `ast_pct`
-  4. `ast_ratio`
-  5. `ast_to`
-  6. `defensive_rating`
-  7. `dreb_percentage`
-  8. `gp`
-  9. `losses`
-  10. `min`
-  11. `net_rating`
-  12. `offensive_rating`
-  13. `oreb_percentage`
-  14. `pace`
-  15. `pie`
-  16. `playerid`
-  17. `teamabr`
-  18. `teamid`
-  19. `tm_tov_pct`
-  20. `ts_pct`
-  21. `usg_pct`
-  22. `win_p`
-  23. `wins`
-  24. `year`
+* `advanced_statistic_seasons`
+  1. `ast_pct`
+  2. `ast_ratio`
+  3. `ast_to`
+  4. `defensive_rating`
+  5. `dreb_percentage`
+  6. `gp`
+  7. `losses`
+  8. `min`
+  9. `net_rating`
+  10. `offensive_rating`
+  11. `oreb_percentage`
+  12. `pace`
+  13. `pie`
+  14. `playerid`
+  15. `teamabr`
+  16. `teamid`
+  17. `tm_tov_pct`
+  18. `ts_pct`
+  19. `usg_pct`
+  20. `win_p`
+  21. `wins`
+  22. `year`
 * `current`
 * `height`
 * `id`
