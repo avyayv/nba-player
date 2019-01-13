@@ -97,7 +97,7 @@ Each player comes in a certain format - as this module is heavily in development
   22. `threep`
   23. `tov`
   24. `year`
-* `advanced_statistic_seasons`
+* `advanced_statistic_seasons`(NOT WORKING AT ALL)
   1. `ast_pct`
   2. `ast_ratio`
   3. `ast_to`
